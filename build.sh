@@ -26,10 +26,11 @@ function process {
 
     cd ..
 
-    mkdir $L_PATH/merge
+    mkdir -p $L_PATH/merge/armv7_arm64
+    mkdir -p $L_PATH/merge/arm64_x86_64
 
-    lipo -create -output $L_PATH/merge/libWeChatSDK-armv7_arm64.a $L_PATH/lib/libWeChatSDK-armv7.a $L_PATH/lib/libWeChatSDK-arm64.a
-    lipo -create -output $L_PATH/merge/libWeChatSDK-arm64_x86_64.a $L_PATH/lib/libWeChatSDK-sim-arm64.a $L_PATH/lib/libWeChatSDK-x86_64.a
+    lipo -create -output $L_PATH/merge/armv7_arm64/libWeChatSDK.a $L_PATH/lib/libWeChatSDK-armv7.a $L_PATH/lib/libWeChatSDK-arm64.a
+    lipo -create -output $L_PATH/merge/arm64_x86_64/libWeChatSDK.a $L_PATH/lib/libWeChatSDK-sim-arm64.a $L_PATH/lib/libWeChatSDK-x86_64.a
 
 
     mkdir -p $OUTPUT_PATH
@@ -38,7 +39,7 @@ function process {
     mkdir $L_PATH/headers
     cp $L_PATH/*.h $L_PATH/headers/
 
-    xcodebuild -create-xcframework -library $L_PATH/merge/libWeChatSDK-armv7_arm64.a -headers $L_PATH/headers  -library $L_PATH/merge/libWeChatSDK-arm64_x86_64.a  -headers $L_PATH/headers  -output $OUTPUT_PATH/WeChatSDK.xcframework
+    xcodebuild -create-xcframework -library $L_PATH/merge/armv7_arm64/libWeChatSDK.a -headers $L_PATH/headers  -library $L_PATH/merge/arm64_x86_64/libWeChatSDK.a  -headers $L_PATH/headers  -output $OUTPUT_PATH/WeChatSDK.xcframework
 
     zip -r $OUTPUT_PATH.zip $OUTPUT_PATH 
 }
