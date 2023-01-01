@@ -32,7 +32,7 @@ function process {
     lipo -create -output $L_PATH/merge/libWeChatSDK-arm64_x86_64.a $L_PATH/lib/libWeChatSDK-sim-arm64.a $L_PATH/lib/libWeChatSDK-x86_64.a
 
 
-    mkdir $OUTPUT_PATH
+    mkdir -p $OUTPUT_PATH
     rm -rf $OUTPUT_PATH/*
 
     mkdir $L_PATH/headers
