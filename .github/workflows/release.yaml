@@ -1,0 +1,28 @@
+name: Publish
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    name: Publish binaries
+    runs-on: macOS-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: install arm64-to-sim
+      run: | 
+        git clone https://github.com/bogo/arm64-to-sim.git
+        cd arm64-to-sim
+        swift build -c release --arch arm64 --arch x86_64
+        cp .build/apple/Products/Release/arm64-to-sim /usr/local/bin/
+    - name: Build
+      run: ls && source build.sh
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: output/*.zip
+        tag: ${{ github.ref }}
+        overwrite: true
+        file_glob: true
